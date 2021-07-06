@@ -43,12 +43,13 @@ if __name__ == '__main__':
                     species = get_most_probable_species(json)
                     confidence_score = get_most_probable_species_confidence(json)
                     scientificNames.append(species['scientificNameWithoutAuthor'])
-                    print(species['scientificNameWithoutAuthor'])
-                           
+                    
+                    label = scientificNames[idx] + " " + confidence_score+"%"
+                    print(str(idx) + " " + label)
                     draw_label(frame, faces[idx], scientificNames[idx] + " " + confidence_score+"%")
                     
                 except TypeError:
-                    draw_label(frame, faces[idx], "unknown species")
+                    draw_label(frame, faces[idx], "unknown species", False, (0, 0, 255))
             
             screenshot(frame, True)
             

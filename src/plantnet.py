@@ -34,7 +34,7 @@ def send_request(img_path):
     response = s.send(prepared)
     json_result = json.loads(response.text)
     
-    pprint(response.status_code)
+    #pprint(response.status_code)
     #pprint(json_result)
     return json_result
     
