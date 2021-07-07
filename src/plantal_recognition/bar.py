@@ -7,7 +7,8 @@ Created on Jul 7, 2021
 import cv2
 import math
 
-lineThickness = 1
+lineThickness = 3
+offset = 20
 
 class ProgressBar(object):
     '''
@@ -20,12 +21,20 @@ class ProgressBar(object):
         '''
         self.percentage = 0
         
-    def update(self, frame, left_x, top_y, width):
-        self.percentage += 5
-        self.draw(frame, left_x, top_y, width)
+    def update(self, frame, rect):
+        if self.percentage < 100:
+            self.percentage += 5
+            frame = self.draw(frame, rect)
+        return frame
     
     def is_full(self):
         return (self.percentage == 100)
     
-    def draw(self, currentframe, left_x, top_y, width):
-        cv2.line(currentframe, (left_x, top_y), (math.ceil(width * self.percentage/100), top_y), (0, 255, 0), lineThickness)
+    def get_value(self):
+        return self.percentage
+    
+    def draw(self, currentframe,rect):
+        left_x, top_y, width, height = rect
+        cv2.line(currentframe, (left_x, top_y + offset + height), 
+                 (math.ceil(left_x + width * self.percentage/100), top_y + offset + height), (0, 255, 0), lineThickness)
+        return currentframe

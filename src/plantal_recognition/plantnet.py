@@ -2,6 +2,8 @@
 Created on Jul 6, 2021
 
 @author: yann
+On utilise l'API plantnet pour classer des images. Il est possible d'utiliser leurs jeux de données réduit, 
+ou lobe.ai à la place (JavaScript). Ces options sont des pistes pour le futur
 '''
 
 import requests
