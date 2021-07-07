@@ -18,9 +18,12 @@ def screenshot(frame, save=False):
         
 def draw_label(frame, face, label, save=False, color=(0, 255, 0)):
     offset = 30
+    size = 0.7
+    
     x, y, _, h = face
     y += offset + h
-    cv2.putText(frame, label, (x, y), font, 1, color, 2)
+    
+    cv2.putText(frame, label, (x, y), font, size, color, 2)
     if save:
         save_frame(frame)
     return frame

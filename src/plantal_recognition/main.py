@@ -5,9 +5,9 @@ Created on Jul 6, 2021
 '''
 
 import cv2
-from facedetect import load_model, detect_faces, crop_faces
-from cam import screenshot, draw_label, save_frames, data_path
-from plantnet import send_request, get_most_probable_species, get_most_probable_species_confidence
+from .facedetect import load_model, detect_faces, crop_faces
+from .cam import screenshot, draw_label, save_frames, data_path
+from .plantnet import send_request, get_most_probable_species, get_most_probable_species_confidence
 
 if __name__ == '__main__':
     

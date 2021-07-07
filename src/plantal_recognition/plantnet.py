@@ -6,7 +6,7 @@ Created on Jul 6, 2021
 
 import requests
 import json
-from pprint import pprint
+#from pprint import pprint
 
 API_KEY = "2b10pWROcUivctTkk45sSIwb"  # Set you API_KEY here
 api_endpoint = f"https://my-api.plantnet.org/v2/identify/all?api-key={API_KEY}"
