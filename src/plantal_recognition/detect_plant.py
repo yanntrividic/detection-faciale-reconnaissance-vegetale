@@ -1,8 +1,6 @@
 '''
 Created on Jul 7, 2021
-
 @author: yann
-
 based on:
 https://jeanvitor.com/tensorflow-object-detecion-opencv/
 https://github.com/krupa3/Fruits-and-vegetables-recognition
@@ -35,7 +33,7 @@ def detect_plant(success, img):
     
     classIds, confs, bbox = net.detect(img,confThreshold=thres)
     if len(classIds) != 0:
-        for classId, confidence, box in zip(classIds.flatten(),confs.flatten(),bbox):
+        for classId, _, box in zip(classIds.flatten(),confs.flatten(),bbox):
             found_plants = []
             if(classNames[classId-1]=='potted plant'):
                 cv2.rectangle(img,box,color=(0,255,0),thickness=2)
@@ -56,9 +54,3 @@ def convert_box_coor(boxes):
         return numpy.array(new_coor)
     else:
         return numpy.empty(shape=(0,))
-    
-    
-        
-        
-        
-        

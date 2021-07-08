@@ -8,9 +8,8 @@ import math
 from .bar import ProgressBar
 from .cam import draw_label, data_path, save_frame
 from .plantnet import send_request, get_most_probable_species, get_most_probable_species_confidence
-from pickle import TRUE
-from pip._internal.cli.cmdoptions import progress_bar
 from .facedetect import crop_faces
+import time
 
 error_thresh = 10000
 
@@ -27,14 +26,15 @@ class Face(object):
         self.label = None
         self.rect = rect
         self.nb = nb
+        self.sl_wait = False
     
     def __repr__(self):
         return(str(self.nb)+" - "+str(self.label)+", "+str(self.progress_bar.get_value()) + "%")
     
     def update(self, frame, score_rect_tuple):
         score, rect, _ = score_rect_tuple
-        
-        #print(score)
+        self.sl_wait = False
+        print(score)
         
         if score < error_thresh:
             self.rect = rect
@@ -43,6 +43,7 @@ class Face(object):
             if self.progress_bar.is_full() and self.label is None:
                 save_frame(crop_faces(frame, [self.rect])[0], data_path+"face"+str(self.nb)+".png")
                 self.label = self.get_label()
+                self.sl_wait = True
                 
             if self.label is not None :
                 self.draw_label(frame)
@@ -53,9 +54,7 @@ class Face(object):
             return False
         
     def get_score(self, rect):
-        #print(self.rect)
         old_x, old_y, old_w, old_h = self.rect
-        #print(rect)
         x, y, w, h = rect
         return math.sqrt((old_x - x)**2 + (old_y - y)**2 + (old_x + old_w - x - w)**2 + (old_x + old_h - x - h)**2) 
     
@@ -88,14 +87,14 @@ class Face(object):
 
 def assign_rect_to_faces(frame, rects, old_faces):
     scores = []
-    #print("in the assign function")
+    print("in the assign function")
 
     for rect in rects:
         for face in old_faces:
             scores.append((face.get_score(rect), rect, face))
     
     scores = sorted(scores, key=lambda x: x[0]) # a voir si la valeur est retournée ou si la liste est triée en elle-même
-    #print(scores)
+    print(scores)
     
     new_faces = [] # on va créer un nouveau tableau pour les old_faces qui passent l'update
     

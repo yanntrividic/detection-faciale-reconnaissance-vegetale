@@ -1,6 +1,5 @@
 '''
 Created on Jul 6, 2021
-
 @author: yann
 '''
 
@@ -10,6 +9,9 @@ from plantal_recognition.facedetect import load_model, detect_faces
 from plantal_recognition.cam import screenshot
 from plantal_recognition.face import analyze_faces
 from plantal_recognition.detect_plant import detect_plant
+
+
+ratio = 1
 
 def concat_arrays(arr1, arr2):
     if numpy.shape(arr1) == (0,) :
@@ -24,6 +26,7 @@ if __name__ == '__main__':
     faceCascade = load_model()
     
     video_capture = cv2.VideoCapture(0)
+    #video_capture.resi
     faces_objects = None
     
     while True:
@@ -57,8 +60,17 @@ if __name__ == '__main__':
             break
         
         #print(faces_objects)
-        cv2.imshow('Video', frame)       
+        print(frame.shape)
+        frame = cv2.resize(frame, (frame.shape[1] * ratio, frame.shape[0] * ratio)) 
+        print(frame.shape)
+        cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
+        cv2.setWindowProperty('frame', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+        cv2.imshow('frame', frame)  
     
+        # for face in faces_objects:
+        #     if face.sl_wait:
+        #         time.sleep(3)  
+        #         break
     # When everything is done, release the capture
     video_capture.release()
     cv2.destroyAllWindows()
