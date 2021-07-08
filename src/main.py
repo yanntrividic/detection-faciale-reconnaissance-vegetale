@@ -8,7 +8,7 @@ import cv2
 import numpy
 from plantal_recognition.facedetect import load_model, detect_faces
 from plantal_recognition.cam import screenshot
-from plantal_recognition.face import analyze_faces
+from plantal_recognition.face import analyze_faces, init_faces
 from plantal_recognition.detect_plant import detect_plant
 
 def concat_arrays(arr1, arr2):
@@ -24,7 +24,8 @@ if __name__ == '__main__':
     faceCascade = load_model()
     
     video_capture = cv2.VideoCapture(0)
-    faces_objects = None
+    faces_objects = init_faces(2)
+    print(faces_objects)
     
     while True:
         # Capture frame-by-frame
@@ -48,7 +49,7 @@ if __name__ == '__main__':
         #print("plants " + str(type(found_plants)) + " " + str(numpy.shape(found_plants)) + " " + str(found_plants))
 
 
-        faces_objects = analyze_faces(frame, faces_objects, concat_arrays(faces, found_plants))
+        faces_objects = analyze_faces(frame, faces_objects, concat_arrays(faces, found_plants), 2)
         
         if ch == ord('c'): # calls screenshot function when 'c' is pressed
             screenshot(frame, True)
