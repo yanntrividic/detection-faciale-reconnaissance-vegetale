@@ -9,6 +9,7 @@ import math
 
 lineThickness = 3
 offset = 20
+increment = 10
 
 class ProgressBar(object):
     '''
@@ -23,7 +24,7 @@ class ProgressBar(object):
         
     def update(self, frame, rect):
         if self.percentage < 100:
-            self.percentage += 5
+            self.percentage += increment
             frame = self.draw(frame, rect)
         return frame
     

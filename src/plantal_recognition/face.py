@@ -34,7 +34,7 @@ class Face(object):
     def update(self, frame, score_rect_tuple):
         score, rect, _ = score_rect_tuple
         
-        print(score)
+        #print(score)
         
         if score < error_thresh:
             self.rect = rect
@@ -53,7 +53,9 @@ class Face(object):
             return False
         
     def get_score(self, rect):
+        #print(self.rect)
         old_x, old_y, old_w, old_h = self.rect
+        #print(rect)
         x, y, w, h = rect
         return math.sqrt((old_x - x)**2 + (old_y - y)**2 + (old_x + old_w - x - w)**2 + (old_x + old_h - x - h)**2) 
     
@@ -86,14 +88,14 @@ class Face(object):
 
 def assign_rect_to_faces(frame, rects, old_faces):
     scores = []
-    print("in the assign function")
+    #print("in the assign function")
 
     for rect in rects:
         for face in old_faces:
             scores.append((face.get_score(rect), rect, face))
     
     scores = sorted(scores, key=lambda x: x[0]) # a voir si la valeur est retournée ou si la liste est triée en elle-même
-    print(scores)
+    #print(scores)
     
     new_faces = [] # on va créer un nouveau tableau pour les old_faces qui passent l'update
     
