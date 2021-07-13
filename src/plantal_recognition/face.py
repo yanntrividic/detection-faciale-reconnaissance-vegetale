@@ -9,7 +9,6 @@ from .bar import ProgressBar
 from .cam import draw_label, data_path, save_frame
 from .plantnet import send_request, get_most_probable_species, get_most_probable_species_confidence
 from .facedetect import crop_faces
-import time
 
 error_thresh = 10000
 
@@ -26,32 +25,22 @@ class Face(object):
         self.label = None
         self.rect = rect
         self.nb = nb
-        self.sl_wait = False
     
     def __repr__(self):
         return(str(self.nb)+" - "+str(self.label)+", "+str(self.progress_bar.get_value()) + "%")
     
     def update(self, frame, score_rect_tuple):
-        score, rect, _ = score_rect_tuple
-        self.sl_wait = False
-        print(score)
+        _, rect, _ = score_rect_tuple
         
-        if score < error_thresh:
-            self.rect = rect
-            frame = self.progress_bar.update(frame, rect)
-            
-            if self.progress_bar.is_full() and self.label is None:
-                save_frame(crop_faces(frame, [self.rect])[0], data_path+"face"+str(self.nb)+".png")
-                self.label = self.get_label()
-                self.sl_wait = True
-                
-            if self.label is not None :
-                self.draw_label(frame)
-                
-            return True # Si la valeur retournée est True, alors on considère que l'update a pu avoir lieu
-
-        else :
-            return False
+        self.rect = rect
+        frame = self.progress_bar.update(frame, rect)
+        
+        if self.progress_bar.is_full() and self.label is None:
+            save_frame(crop_faces(frame, [self.rect])[0], data_path+"face"+str(self.nb)+".png")
+            self.get_label()
+        
+        if self.label is not None :
+            self.draw_label(frame)   
         
     def get_score(self, rect):
         old_x, old_y, old_w, old_h = self.rect
@@ -67,15 +56,13 @@ class Face(object):
         
         try:
             species = get_most_probable_species(json)['scientificNameWithoutAuthor']
-            confidence_score = get_most_probable_species_confidence(json)
-                
-            label = species + " " + confidence_score+"%"            
+            confidence_score = get_most_probable_species_confidence(json)  
+            self.label = species + " " + confidence_score+"%"            
         
         except TypeError:
-            label = "unknown species"
+            self.label = "unknown species"
             
-        print(str(self.nb) + " " + str(self.label))
-        return label
+        print(self)
     
     def draw_label(self, frame):
         draw_label(frame, self.rect, self.label)
@@ -85,46 +72,41 @@ class Face(object):
         x, y, w, h = rect
         return my_x == x and my_y == y and my_w == w and my_h == h
 
-def assign_rect_to_faces(frame, rects, old_faces):
+def assign_rect_to_faces(frame, current_faces, old_faces):
     scores = []
-    print("in the assign function")
 
-    for rect in rects:
-        for face in old_faces:
-            scores.append((face.get_score(rect), rect, face))
+    for current in current_faces:
+        for old in old_faces:
+            scores.append((old.get_score(current), current, old))
     
     scores = sorted(scores, key=lambda x: x[0]) # a voir si la valeur est retournée ou si la liste est triée en elle-même
-    print(scores)
-    
     new_faces = [] # on va créer un nouveau tableau pour les old_faces qui passent l'update
     
-    for face in old_faces: # la meilleure valeur est utilisée pour la face correspondante
+    for old in old_faces: # la meilleure valeur est utilisée pour la old correspondante
         for score in scores:
-            if face == score[2] : 
-                result = face.update(frame, score)
-                if result :
-                    new_faces.append(face)
+            if old is score[2] : 
+                old.update(frame, score)
+                new_faces.append(old)
                 break
     
     return new_faces
             
-def analyze_faces(frame, old_faces, faces):
+def analyze_faces(frame, old_faces, current_faces):
     '''
     takes as input an array of Face object and a series of frames that correspond to a found face
     '''
     
-    if old_faces is None or len(old_faces) != len(faces): #si old_faces est vide, on le crée
+    if old_faces is None or len(old_faces) != len(current_faces): #si old_faces est vide, on le crée
         faces_objects = []
-        for idx, face in enumerate(faces): 
+        for idx, face in enumerate(current_faces): 
             faces_objects.append(Face(face, idx))
         return faces_objects
     
-    elif len(old_faces) < len(faces): #s'il y a moins de faces dans old_faces que dans ce qui est détecté, on en ajoute une
-        for i in range(len(faces) - len(old_faces)):
+    elif len(old_faces) < len(current_faces): #s'il y a moins de current_faces dans old_faces que dans ce qui est détecté, on en ajoute une
+        for i in range(len(current_faces) - len(old_faces)):
             old_faces.append(Face((250, )*4,
                                   len(old_faces) + i))
     
-    #maintenant on peut juste essayer d'update
     
-    return assign_rect_to_faces(frame, faces, old_faces)
+    return assign_rect_to_faces(frame, current_faces, old_faces)
         

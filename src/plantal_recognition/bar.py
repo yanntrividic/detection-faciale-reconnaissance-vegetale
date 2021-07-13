@@ -23,8 +23,8 @@ class ProgressBar(object):
         self.percentage = 0
         
     def update(self, frame, rect):
-        self.percentage += 20
         if self.percentage < 100:
+            self.percentage += 20
             frame = self.draw(frame, rect)
         return frame
     
