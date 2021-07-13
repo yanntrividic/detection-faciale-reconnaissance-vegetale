@@ -16,7 +16,7 @@ Le dépôt contient trois dossiers : `src` pour le code source, `data` pour quel
 ## Modèles utilisés
 Pour la classification d'objets (c'est-à-dire pour la détection des plantes) nous utilisons un modèle de Tensorflow. Celui-ci permet d'isoler une plante du reste de l'image.
 
-Pour la détection de visages, nous utilisons le modèle développé dans le cadre du projet opensource mené par Adam Geitgey : `face_recognition`. Celui-ci est entraîné sur la base de données Labeled Faces in the Wild, une base de données contenant une diversité de visages suffisante pour pouvoir détecter l'extrême majorité des visages. **Au départ, ce projet implémentait le modèle de détections de visages du projet OpenCV. Celui-ci n'offrait pas de performances acceptables sur les visages des personnes non blanches.** Pour plus d'informations sur la question et le travail que nous avons effectué en réaction à ce problème : [lien](https://chloedesmoineaux.surf/desvisagesdesmondes)
+Pour la détection de visages, nous utilisons le modèle développé dans le cadre du projet opensource mené par Adam Geitgey : `face_recognition`. Celui-ci est entraîné sur la base de données Labeled Faces in the Wild, une base de données contenant une diversité de visages suffisante pour pouvoir détecter l'extrême majorité des visages. **Au départ, ce projet implémentait le modèle de détections de visages du projet OpenCV. Celui-ci n'offrait pas de performances acceptables sur les visages des personnes non blanches.** Pour plus d'informations sur la question et le travail que nous avons effectué en réaction à ce problème : [lien](https://chloedesmoineaux.surf/desvisagesdesmondes).
 
 Pour l'identification des plantes, nous utilisons l'API du projet Pl@ntNet.
 
