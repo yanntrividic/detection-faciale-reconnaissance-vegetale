@@ -1,8 +1,9 @@
 # Reconnaissance plantale
 Ce logiciel a été développé avec Python 3.9, OpenCV et les projets Pl@ntNet et facial_recognition. Après avoir détecté les visages présents dans le champ de votre webcam, il les associe à des espèces de plantes en donnant leurs images à un réseau neuronal profond d'identification de plantes.
 
-![exemple1](https://raw.githubusercontent.com/yanntrividic/detection-faciale-reconnaissance-vegetale/main/a_plant_and_i.png)
-![exemple2](https://raw.githubusercontent.com/yanntrividic/detection-faciale-reconnaissance-vegetale/main/two_ids.png)
+<img src="https://raw.githubusercontent.com/yanntrividic/detection-faciale-reconnaissance-vegetale/main/a_plant_and_i.png" alt="exemple1" width="400"/>
+<img src="https://raw.githubusercontent.com/yanntrividic/detection-faciale-reconnaissance-vegetale/main/two_ids.png" alt="exemple2" width="400"/>
+
 
 **Version :** 1.0  
 **Auteur :** Yann Trividic  
